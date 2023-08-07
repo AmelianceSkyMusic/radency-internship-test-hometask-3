@@ -6,6 +6,8 @@ import {
 	Param,
 	Patch,
 	Post,
+	UsePipes,
+	ValidationPipe,
 } from '@nestjs/common';
 import { NoteDto } from './note.dto';
 import { NotesService } from './notes.service';
@@ -49,11 +51,12 @@ export class NotesController {
 		return this.notesService.getNote(id);
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post('notes')
 	async addNote(@Body() dto: NoteDto) {
 		return this.notesService.addNote(dto);
 	}
-
+	@UsePipes(new ValidationPipe())
 	@Patch('notes/:id')
 	async editNote(@Param('id') id: string, @Body() dto: NoteDto) {
 		return this.notesService.editNote(id, dto);
