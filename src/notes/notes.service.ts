@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { NoteDto } from './note.dto';
+import { NoteDto } from './dto/note.dto';
 import { Note } from '../types/Note';
-import { notes } from 'src/data/notes';
 import { getCurrentDateInMs } from 'src/utils/helpers/getCurrentDateInMs';
 import { archive } from 'src/data/archive';
 import { getCategoriesFromNote } from 'src/utils/helpers/getCategoriesFromNote';
+import { notes } from 'src/data/notes';
+import { getCheckNote } from './helpers/getCheckNote';
 
 @Injectable()
 export class NotesService {
@@ -34,7 +35,7 @@ export class NotesService {
 	}
 
 	async moveNoteToArchive(id: string) {
-		const note = this.data.notes.find((note) => note.id === Number(id));
+		const note = getCheckNote(this.data.notes, id);
 		const newNotes = this.data.notes.filter((note) => note.id !== Number(id));
 		this.data = {
 			archive: [...this.data.archive, note],
@@ -44,7 +45,7 @@ export class NotesService {
 	}
 
 	async moveNoteFromArchive(id: string) {
-		const note = this.data.archive.find((note) => note.id === Number(id));
+		const note = getCheckNote(this.data.archive, id);
 		const newNotes = this.data.archive.filter(
 			(note) => note.id !== Number(id),
 		);
@@ -56,7 +57,7 @@ export class NotesService {
 	}
 
 	async getNote(id: string) {
-		return this.data.notes.find((note) => note.id === Number(id));
+		return getCheckNote(this.data.notes, id);
 	}
 
 	async addNote(dto: NoteDto) {
@@ -70,7 +71,7 @@ export class NotesService {
 	}
 
 	async editNote(id: string, dto: NoteDto) {
-		const note = this.data.notes.find((note) => note.id === Number(id));
+		const note = getCheckNote(this.data.notes, id);
 		note.name = dto.name;
 		note.category = dto.category;
 		note.content = dto.content;
@@ -78,12 +79,14 @@ export class NotesService {
 	}
 
 	async deleteNoteFromNotes(id: string) {
+		getCheckNote(this.data.notes, id);
 		const newNotes = this.data.notes.filter((note) => note.id !== Number(id));
 		this.data = { archive: [...this.data.archive], notes: [...newNotes] };
 		return newNotes;
 	}
 
 	async deleteNoteFromArchive(id: string) {
+		getCheckNote(this.data.archive, id);
 		const newNotes = this.data.archive.filter(
 			(note) => note.id !== Number(id),
 		);
