@@ -9,7 +9,7 @@ import {
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common';
-import { NoteDto } from './note.dto';
+import { NoteDto } from './dto/note.dto';
 import { NotesService } from './notes.service';
 
 @Controller()
