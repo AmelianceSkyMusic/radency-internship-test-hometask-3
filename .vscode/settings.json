@@ -1,0 +1,23 @@
+{
+	"editor.formatOnPaste": false,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": false,
+		"source.fixAll.eslint": true
+	},
+	"cSpell.language": "uk,en,lorem",
+	"files.eol": "\n",
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"runOnSave.commands": [
+		{
+			"match": "\\.(css|s[ac]ss)$",
+			"runIn": "vscode",
+			"commandBeforeSaving": "sort-css-declarations.sort-all"
+		},
+		{
+			"match": "\\.(ts|tsx)$",
+			"runIn": "vscode",
+			"commandBeforeSaving": "typescript.removeUnusedImports"
+		}
+	]
+}
